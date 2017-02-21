@@ -1,0 +1,196 @@
+---
+title: <center>PCSF Package</center>
+author: <center>Murodzhon Akhmedov, Amanda Kedaigle, Renan Escalante, Roberto Montemanni, Francesco Bertoni, Ernest Fraenkel, Ivo Kwee </center>
+date: <center>February 21, 2017</center>
+output:
+  html_document:
+    theme: cerulean
+bibliography: ref.bib
+---
+
+<br>
+<br>
+
+####Introduction
+
+A tremendous amount of high-throughput data at multiple layers of cellular systems has been profiled to study biological responses to perturbations and disease. The current challenge is to develop methods for effective analysis of these data to better interpret underlying biology and identify functional units. Network modeling approaches are some of the techniques lately used for analysis of biological networks [@Dittrich]. Recently, the Prize-collecting Steiner Forest (PCSF) algorithm has been applied to interaction networks to find a subnetwork enriched for input data, which corresponds to relevant subunits in the interactome of a cell [@Bechet, @Tuncbag]. 
+
+The PCSF problem has NP-hard characteristics, and requires a great deal of effort to find exact solutions on larger biological networks. Recently, we have developed a fast heuristic for the PCSF [@Akhmedov2016], and conducted a detailed performance comparison with existing methods [@Akhmedov]. As an extension to this, we present an R package that performs fast and user-friendly analysis of high-throughput data using the interaction networks as a template, and interprets the biological landscape of interactome with respect to the data. More specifically, the PCSF package allows the user to i) upload the interactome and patient data ii) compute the PCSF subnetwork solution iii) perform functional analysis on resulting subnetwork iv) and interactively visualize the final subnetwork with functional enrichment information.
+
+
+<br>
+<br>
+
+#### The PCSF: Optimization Approach on Biological Networks
+
+The PCSF is a well-known problem in graph theory. Given an undirected graph $G = (V, E)$, where the vertices are labeled with prizes $p_{v}$ and the edges are labeled with costs $c_{e} > 0$, the goal is to identify a subnetwork $G' = (V', E')$ with a forest structure. The target is to minimize the total edge costs in $E'$, the total node prizes left out of $V'$, and the number of trees in $G'$. This is equivalent to  minimization of the following objective function:
+
+  $$F(G')= \textit{Minimize} \sum_{e{\in}E'} c_{e} + \beta*\sum_{v{\not\in}V'} p_{v} + w*k \label{GW}$$
+
+where $k$ is the number of trees in the forest, and it is regulated by parameter $w$. The parameter $\beta$ is used to tune the prizes of nodes relative to edge costs. 
+
+
+Recently, we have applied PCSF to biological networks in the Forest module of the Omics Integrator software [@Tuncbag]. In biological networks such as Protein-Protein Interaction (PPI) networks, every vertex represents a biomolecule, and every edge corresponds to the cellular interaction between two biomolecules. Edges of the network are given costs which correspond to confidence or frequency of that interaction. The vertices of the network are given prizes according to the measurements of differential expression, copy number, or number of mutation for that gene/protein. The set of vertices that are assigned a prize are referred to as `terminal` nodes. Non-terminal nodes, which were not observed in the experimental data, may appear in the solution and are called `Steiner` nodes. After scoring the interactome, the PCSF is used to detect a relevant subnetwork (forest). The PCSF aims to identify  neighborhoods in interaction networks potentially belonging to the key dysregulated pathways of a disease or experiment.
+
+In order to avoid a bias for the hub nodes of PPI networks to appear in solution of PCSF, we use the method introduced in Forest [@Tuncbag], which penalizes the prizes of  nodes according to their degree in the PPI. The parameter $\mu$ controls the size of these penalties:
+  $$p'_{v} = p_{v} - \mu*degree(v)$$
+
+<br>
+<br>
+
+
+#### Package Dependencies and Installation
+
+The PCSF package depends on the following R-packages: 
+
+* BH
+* httr
+* igraph
+* Rcpp
+* visNetwork
+
+
+In order to compile the source, Windows users should install the `Rtools` package by the following [link](https://cran.r-project.org/bin/windows/Rtools/) that installs GCC and CMake.
+
+
+The PCSF package and its dependencies can be installed on Mac OS, Linux and Windows by running the following commands in the R console.
+
+```{r, eval=FALSE}
+install.packages("devtools", dep = TRUE)
+devtools::install_github("IOR-Bioinformatics/PCSF")
+```
+
+<br>
+<br>
+
+
+#### Application
+
+In this simple example application, we demonstrate the functions of the PCSF package and its usage. In this study, we analyze differential phosphoproteomic data derived from H358 cells, a model of non-small cell lung cancer, that were stimulated with TGF-β. These data were previously published [@Thomson], and are the same ones used to demonstrate Omics Integrator [@Tuncbag, Figure 4]. We used the PPI network from the STRING database (version 13) [@Szklarczyk] as a template network, in which the network edges have a confidence score `s(e)` computed from experimental channels. The low confidence edges with `s(e) < 0.5` are removed from the interactome to increase the reliability of computational findings. We convert edge confidence into edge cost: `c(e) = max(0.01, 1-s(e))`. The mutation data and PPI network is available in the package. Let's load the library and data into an R session.
+
+```{r, results='hide', message=FALSE, warning=FALSE}
+library(PCSF)
+```
+
+```{r}
+data("STRING")
+data("Tgfb_phospho")
+```
+<br>  
+Next, we construct a PPI network using the STRING data employing the `construct_interactome()` function. The resulting PPI network consists of 17581 edges and 15405 nodes. 
+
+Users can construct a PPI network by providing their own interactome. An interactome data for `construct_interactome()` must be a `data.frame` composed of three columns, where each row corresponds to an edge, in which the first element is a `head`, the second element is a `tail`, and the last element represents the `cost` of the edge.
+
+```{r}
+ppi <- construct_interactome(STRING)
+ppi
+```
+<br>  
+
+We then generate a vector named `terminals` which is composed of genes with prizes to be analyzed in the PCSF context. Here, our prizes come from the phosphoproteomic data derived from H358 cells. There are 58 proteins which were determined to be significantly modulated in phosphorylation after TGF-β stimulation, and the prize for each protein is the absolute value of the log fold change in phosphotyrosine abundance.
+
+Users can generate this vector by providing their own data. It must be a named numeric vector, where the genes names are the same as in the interaction network and numeric values correspond to the importance of the gene within the study.
+
+```{r}
+terminals <- Tgfb_phospho
+str(terminals)
+```
+<br>  
+
+After properly obtaining the PPI network and scoring it, we employ the PCSF approach to identify the subnetwork with the following function, in which the arguments are: `ppi` - a weighted PPI network, `terminals` - a named numeric vector which corresponds to the list of genes with prizes, `w` - a parameter for tuning the number of trees in the subnetwork, `b` - a numeric value for tuning the node prizes, `mu` - a parameter for hub penalization. This function outputs the subnetwork as an `igraph` object.
+
+```{r, message=FALSE, warning=FALSE, results='hide'}
+subnet <- PCSF(ppi, terminals, w = 2, b = 1, mu = 0.0005)
+```
+<br>  
+
+The dynamic and interactive version of final subnetwork can be plotted with the `plot.PCSF()` function, where it takes the arguments: `x` - the output obtained by PCSF approach, `style` - a boolean value to determine the visualization style of the network, `edge_width` - a variable to adjust edge widths, `node_size` - a numeric value to adjust the size of nodes, `node_label_cex` - a numeric value to set node label size, `Steiner_node_color` - a variable to color the `Steiner` nodes, `Terminal_node_color` - a variable to color `terminal` nodes. The node sizes and edge widths in the figure are proportional to the prize of nodes and probability of existence of the edges, respectively, and they are adjusted according to `node_size` and `edge_width` parameters.
+
+```{r, eval=FALSE}
+plot(subnet, style = 1, edge_width=5, node_size=40, node_label_cex = 30, Steiner_node_color = "lightblue", 
+            Terminal_node_color = "lightgreen")
+```
+
+<center>
+```{r, echo=FALSE, fig.width=9, fig.height=6}
+plot(subnet, style = 1, edge_width=5, node_size=40, node_label_cex = 30, Steiner_node_color = "lightblue", 
+            Terminal_node_color = "lightgreen")
+```
+</center>
+<br>  
+
+Now, let's observe how the hub penalization parameter is effecting the final subnetwork. We solve the PCSF with a higher `mu` value than previous one (`mu=0.05`), and plot the subnetwork. It is clear that when the `mu` value is increased, we get very limited number of `Steiner` nodes and a smaller subnetwork overall.
+
+```{r, results='hide', message=FALSE, warning=FALSE}
+subnet <- PCSF(ppi, terminals, w = 2, b = 100, mu = 0.05)
+plot(subnet, style = 1)
+```
+<center>
+```{r, echo=FALSE, fig.width=9, fig.height=6}
+plot(subnet, style = 1)
+```
+</center>
+<br>  
+
+However, if we set `mu` to zero, we see that the forest relies on the hub node UBC, or the regulatory protein ubiquitin-C. These hub nodes are often not specific to the system in the experiment.
+
+```{r, results='hide', message=FALSE, warning=FALSE}
+subnet <- PCSF(ppi, terminals, w = 2, b = 100, mu = 0)
+plot(subnet, style = 1)
+```
+<center>
+```{r, echo=FALSE, fig.width=9, fig.height=6}
+plot(subnet, style = 1)
+```
+</center>
+
+<br>  
+<br>  
+
+
+#### Adding random noise to the edge costs
+
+We must be cautious making a biological interpretation of data based on a single run of PCSF. Since the PPI network is huge and data is noisy, it is possible to have some random nodes in the output forest of each run. In order to increase the robustness of the resulting structure, it is a reasonable approach to solve PCSF several times by adding some noise to edge costs each time, and combine all results in the final forest. The union of all outputs may explain the underlying biology better. Running the PCSF with noisy edge costs can be performed with the function below, where argument `n` determines the number of runs and argument `r` determines the level of noise.
+
+
+```{r, results='hide', message=FALSE, warning=FALSE}
+subnet <- PCSF_rand(ppi, terminals, n=10, r = 0.1, w = 2, b = 1, mu = 0.0005)
+```
+<br>
+<br>
+
+
+
+#### Functional Enrichment Analysis
+
+The enrichment analysis of the final subnetwork is performed with the `enrichment_analysis()` function. The subnetwork is clustered by edge betweenness algorithm from the `igraph` package, and for each cluster the functional enrichment is performed by employing the ENRICHR API [@Chen]. This function gathers and combines the enrichment analyses for `GO_Biological_Process_2015`,`KEGG_2016`, `Reactome_2016`, and `BioCarta_2016` databases using the ENRICHR. The user must have an internet connection for enrichment analysis.
+
+This function returns an annotated subnetwork (`igraph` object) and a list of tables that contain full enrichments for each cluster. The subnetwork can be saved in a desirable format available in the `igraph` pacakge.
+
+```{r, results='hide', message=FALSE, warning=FALSE}
+res <- enrichment_analysis(subnet)
+```
+<br>
+
+An interactive version of the annotated subnetwork is visualized by the `plot.PCSFe()` function, where each cluster is colored differently. The plotting function requires the following arguments: `x` - an annotated subnetwork obtained by the `enrichment_analysis()` function, `node_size` - a variable to adjust the size of nodes, `node_label_cex` - a numeric value to adjust the node label size, and `edge_weight` - a variable to set the edge weights. 
+
+The node sizes and edge widths are proportional to the amount of times that node or edge appeared in the noisy runs. Nodes are colored according to cluster membership. As in the ENRICHR API, the p-value is calculated using the Fisher test and adjusted for multiple hypotheses. The combined score corresponds to multiplication of the log p-value and the z-score of the deviation from the expected rank of that term in random lists of genes. The top 15 functional enrichment terms for each cluster are ranked according to the adjusted p-value and displayed in a tabular format when the mouse hovers over a node in that cluster. Each cluster can be visualized separately by “Select by group” icon located at the top of the figure.
+
+```{r, eval=FALSE}
+plot(res$subnet, edge_width = 8, node_size = 30, node_label_cex = 1)
+```
+
+<center>
+```{r, echo=FALSE, message=FALSE, warning=FALSE, fig.width=9, fig.height=6}
+plot(res$subnet, edge_width = 8, node_size = 30, node_label_cex = 1)
+```
+</center>
+  
+In this case, the presence of subnetworks enriched for Gene Ontology terms like 'mesenchymal-epithelial cell signaling' and 'EGFR downregulation' confirm the importance of these pathways in this lung cancer model. We also see Steiner nodes such as CBL, which has been shown to be involved in several models of non-small cell lung cancers [@Tan], like the H358 cell line. Therefore, we see that the PSCF algorithm points out proteins and pathways that are highly relevant to the system under study.
+  
+<br>
+<br>
+
+
+#### REFERENCES
+

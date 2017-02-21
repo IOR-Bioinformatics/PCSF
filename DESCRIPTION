@@ -1,0 +1,22 @@
+Package: PCSF
+Type: Package
+Title: Network-based interpretation of highthroughput data
+Version: 0.99.0
+Date: 2017-02-01
+Author: Murodzhon Akhmedov, Amanda Kedaigle, Renan Escalante, Roberto Montemanni, Francesco Bertoni, Ernest Fraenkel, Ivo Kwee
+Maintainer: Murodzhon Akhmedov <murodzhon@idsia.ch>
+Description: The PCSF package performs an integrated analysis of highthroughput data using the interaction networks as a template, and interprets the biological landscape of interaction networks with respect to the data, which potentially leads to predictions of functional units. It also interactively visualize the resulting subnetwork with functional enrichment analysis.
+License: MIT + file LICENSE
+Suggests:
+        knitr, 
+        rmarkdown
+Depends:
+        R (>= 3.1.0),
+        igraph,
+        visNetwork
+Imports:
+        BH,
+        httr,
+        Rcpp
+LinkingTo: Rcpp, BH
+RoxygenNote: 5.0.1
