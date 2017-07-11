@@ -13,10 +13,14 @@ Suggests:
 Depends:
         R (>= 3.1.0),
         igraph,
-        visNetwork
+        visNetwork,
 Imports:
         BH,
+        BiocGenerics,
         httr,
+        methods,
+        org.Hs.eg.db,
+        topGO,
         Rcpp
 LinkingTo: Rcpp, BH
-RoxygenNote: 5.0.1
+RoxygenNote: 6.0.1
