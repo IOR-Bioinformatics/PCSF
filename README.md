@@ -31,10 +31,10 @@ Installation:
 
 1. The PCSF package depends on the following R-packages: 
 
-  - BH and igraph - for efficient graph handling and calculations,
-  - BiocGenerics, httr, methods, org.Hs.eg.db, and topGO - to perform enrichment analysis,
-  - Rcpp  - to employ C++ source code within R,
-  - visNetwork - for visualization.
+ - `BH` and `igraph` - for efficient graph handling and calculations,
+ - `BiocGenerics`, `httr`, `methods`, `org.Hs.eg.db`, and `topGO` - to perform enrichment analysis,
+ - `Rcpp`  - to employ C++ source code within R,
+ - `visNetwork` - for visualization.
 
 
 2. In order to compile the source, Windows users should install the `Rtools` package by the following [link](https://cran.r-project.org/bin/windows/Rtools/) that installs GCC and CMake.
