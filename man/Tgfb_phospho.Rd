@@ -18,4 +18,3 @@ This dataset contains differential phosphoproteomic data derived from H358 cells
 a model of lung cancer, that were stimulated with TGF-b.
 }
 \keyword{data}
-

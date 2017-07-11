@@ -51,15 +51,14 @@ ppi <- construct_interactome(STRING)
 subnet <- PCSF_rand(ppi, terminals, n = 10, r =0.1, w = 2, b = 2, mu = 0.0005)}
 
 }
-\author{
-Murodzhon Akhmedov
-}
 \references{
-Akhmedov M., LeNail A., Bertoni F., Kwee I., Fraenkel E., and Montemanni R. (2017).
-"A Fast Prize-Collecting Steiner Forest Algorithm for Functional Analyses in Biological Networks."
+Akhmedov M., LeNail A., Bertoni F., Kwee I., Fraenkel E., and Montemanni R. (2017)
+A Fast Prize-Collecting Steiner Forest Algorithm for Functional Analyses in Biological Networks.
 \emph{Lecture Notes in Computer Science}, to appear.
 }
 \seealso{
 \code{\link{PCSF}}, \code{\link{plot.PCSFe}}
 }
-
+\author{
+Murodzhon Akhmedov
+}

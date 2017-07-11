@@ -17,4 +17,3 @@ STRING
 An interactome data set in which the nodes are named with gene symbols
 }
 \keyword{data}
-

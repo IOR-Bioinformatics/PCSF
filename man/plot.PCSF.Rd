@@ -54,10 +54,9 @@ subnet <- PCSF(ppi, terminals, w = 2, b = 1, mu = 0.0005)
 plot(subnet)}
 
 }
-\author{
-Murodzhon Akhmedov
-}
 \seealso{
 \code{\link{PCSF}}, \code{\link{plot.PCSFe}}
 }
-
+\author{
+Murodzhon Akhmedov
+}

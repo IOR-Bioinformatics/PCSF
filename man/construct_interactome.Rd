@@ -28,4 +28,3 @@ ppi <- construct_interactome(STRING)}
 \author{
 Murodzhon Akhmedov
 }
-

@@ -4,10 +4,14 @@
 \alias{call_enr}
 \title{Internal function \code{call_enr}}
 \usage{
-call_enr(clusters)
+call_enr(clusters, mode = 0, gene_universe)
 }
 \arguments{
-\item{clusters}{A subnetwork clustered using edge betweenness algorithm of \pkg{igraph}.}
+\item{clusters}{A subnetwork clustered using edge betweenness algorithm of \pkg{igraph} package.}
+
+\item{mode}{A binary variable to choose the method for enrichment analysis, where 0 is for EnrichR API and 1 is for \pkg{topGO} package.}
+
+\item{gene_universe}{A complete list of genes (vector of gene symbols) used as background in enrichment analysis by \pkg{topGO} package.}
 }
 \description{
 This function is internally used to perform enrichment analysis employing ENRICHR API.
@@ -16,4 +20,3 @@ This function is internally used to perform enrichment analysis employing ENRICH
 Murodzhon Akhmedov
 }
 \keyword{internal}
-

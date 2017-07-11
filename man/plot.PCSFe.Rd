@@ -52,15 +52,14 @@ res <- enrichment_analysis(subnet)
 plot(res$subnet)}
 
 }
-\author{
-Murodzhon Akhmedov
-}
 \references{
 Chen E.Y., Christopher M.T., Yan K., Qiaonan D., Zichen W., Gabriela V.M., Neil R.C., and Avi M. (2013) 
-"Enrichr: Interactive and Collaborative Html5 Gene List Enrichment Analysis Tool." \emph{BMC Bioinformatics} 14 (1). 
+Enrichr: Interactive and Collaborative Html5 Gene List Enrichment Analysis Tool. \emph{BMC Bioinformatics} 14 (1). 
 BioMed Central: 1.
 }
 \seealso{
 \code{\link{enrichment_analysis}}, \code{\link{PCSF_rand}}, \code{\link{plot.PCSF}}
 }
-
+\author{
+Murodzhon Akhmedov
+}

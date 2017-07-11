@@ -4,13 +4,17 @@
 \alias{enrichment_analysis}
 \title{Perform enrichment analysis on the subnetwork}
 \usage{
-enrichment_analysis(subnet)
+enrichment_analysis(subnet, mode = NULL, gene_universe)
 }
 \arguments{
 \item{subnet}{A subnetwork provided by \code{\link{PCSF_rand}}, which is obtained by merging 
 a multiple outputs of the PCSF with random noise added edge costs. An \pkg{igraph} object 
 with edge cost and vertex prize attributes representing the total number of 
 show ups throughout all runs.}
+
+\item{mode}{A binary variable to choose the method for enrichment analysis, where 0 is for EnrichR API and 1 is for \pkg{topGO} package.}
+
+\item{gene_universe}{A complete list of genes (vector of gene symbols) used as background in enrichment analysis by \pkg{topGO} package.}
 }
 \value{
 A list composed of an interactive subnetwork and a table with enrichment 
@@ -29,7 +33,14 @@ An enrichment analysis of the final subnetwork obtained by multiple runs of the 
 (with rando noise added edge costs) is performed for functional interpretation. 
 The subnetwork is clustered using an edge betweenness clustering algorithm from 
 the \pkg{igraph} package, and for each cluster functional enrichment is done by 
-employing the ENRICHR API (Chen \emph{et al.}, 2013). An interactive visualization of 
+employing either EnrichR API (Chen \emph{et al.}, 2013) or 
+\pkg{topGO} (Alexa and Rahnenfuhrer, 2009)
+package that is specified by the user. Important to note that EnrichR API requires 
+a working Internet connection to perform the enrichment. If the user does not 
+specify which tool to use for enrichment analysis, the package employs EnrichR 
+as a default if there is Internet connection, otherwise it uses \pkg{topGO}. 
+
+An interactive visualization of 
 the final subnetwork is plotted, where the node sizes and edge widths are proportional 
 to the frequency of show ups throughout total runs. Nodes are colored according to the 
 cluster membership, and the top 15 functional enrichment terms are displayed in tabular 
@@ -43,23 +54,29 @@ data("Tgfb_phospho")
 terminals <- Tgfb_phospho
 ppi <- construct_interactome(STRING)
 subnet <- PCSF_rand(ppi, terminals, n = 10, r = 0.1, w = 2, b = 1, mu = 0.0005)
-res <- enrichment_analysis(subnet)}
-
+res <- enrichment_analysis(subnet)
+res <- enrichment_analysis(subnet, mode=0)}
+\dontrun{
+gene_universe <- V(ppi)$name
+res <- enrichment_analysis(subnet, mode=1, gene_universe)
+ }
 \dontrun{
 plot(res$subnet)
 write.table(res$enrichment[[1]],file="cluster1_complete_enrichment.txt", 
              append = FALSE, quote = FALSE, sep ="\\t", row.names=FALSE)}
              
 }
-\author{
-Murodzhon Akhmedov
-}
 \references{
 Chen E.Y., Christopher M.T., Yan K., Qiaonan D., Zichen W., Gabriela V.M., Neil R.C., 
-and Avi M. (2013) "Enrichr: Interactive and Collaborative Html5 Gene List Enrichment 
-Analysis Tool." \emph{BMC Bioinformatics} 14 (1). BioMed Central: 1.
+and Avi M. (2013) Enrichr: Interactive and Collaborative Html5 Gene List Enrichment 
+Analysis Tool. \emph{BMC Bioinformatics} 14 (1). BioMed Central: 1.
+
+Alexa A. and Rahnenfuhrer J. (2009). topGO: Enrichment Analysis for Gene Ontology.
+ R package version 2.28.0.
 }
 \seealso{
 \code{\link{PCSF_rand}}, \code{\link{plot.PCSFe}}
 }
-
+\author{
+Murodzhon Akhmedov
+}

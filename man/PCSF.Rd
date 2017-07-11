@@ -59,6 +59,14 @@ of PCSF, we penalize the prizes of \emph{Steiner} nodes according to their degre
 distribution in PPI, and it is regulated by parameter \eqn{\mu}:
 
  \deqn{p'_{v} = p_{v} - \mu*degree(v)}
+ 
+ The parameter \eqn{\mu} also affects the total number of \emph{Steiner} nodes in the solution. 
+ Higher the value of \eqn{\mu} smaller the number of \emph{Steiners} in the subnetwork, 
+ and vice-versa. Based on our previous analysis the recommended range of \eqn{\mu} 
+ for biological networks is between 1e-4 and 5e-2, and users can choose the values 
+ resulting subnetworks with vertex sets that have desirable \emph{Steiner/terminal} 
+ node ratio and average \emph{Steiner/terminal} in-degree ratio 
+ in the template interaction network.
 }
 \examples{
 \dontrun{
@@ -70,15 +78,14 @@ ppi <- construct_interactome(STRING)
 subnet <- PCSF(ppi, terminals, w = 2, b = 1, mu = 0.0005)}
 
 }
-\author{
-Murodzhon Akhmedov
-}
 \references{
-Akhmedov M., LeNail A., Bertoni F., Kwee I., Fraenkel E., and Montemanni R. (2017).
-"A Fast Prize-Collecting Steiner Forest Algorithm for Functional Analyses in Biological Networks."
+Akhmedov M., LeNail A., Bertoni F., Kwee I., Fraenkel E., and Montemanni R. (2017)
+A Fast Prize-Collecting Steiner Forest Algorithm for Functional Analyses in Biological Networks.
 \emph{Lecture Notes in Computer Science}, to appear.
 }
 \seealso{
 \code{\link{PCSF_rand}}, \code{\link{plot.PCSF}}
 }
-
+\author{
+Murodzhon Akhmedov
+}
