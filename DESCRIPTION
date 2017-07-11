@@ -12,15 +12,15 @@ Suggests:
         rmarkdown
 Depends:
         R (>= 3.1.0),
+        BiocGenerics,
         igraph,
         visNetwork,
-Imports:
-        BH,
-        BiocGenerics,
-        httr,
         methods,
         org.Hs.eg.db,
         topGO,
+Imports:
+        BH,
+        httr,
         Rcpp
 LinkingTo: Rcpp, BH
 RoxygenNote: 6.0.1
