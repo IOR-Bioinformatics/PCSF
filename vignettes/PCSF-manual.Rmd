@@ -23,16 +23,16 @@ The PCSF problem has NP-hard characteristics, and requires a great deal of effor
 
 #### The PCSF: Optimization Approach on Biological Networks
 
-The PCSF is a well-known problem in graph theory. Given an undirected graph $G = (V, E)$, where the vertices are labeled with prizes $p_{v}$ and the edges are labeled with costs $c_{e} > 0$, the goal is to identify a subnetwork $G' = (V', E')$ with a forest structure. The target is to minimize the total edge costs in $E'$, the total node prizes left out of $V'$, and the number of trees in $G'$. This is equivalent to  minimization of the following objective function:
+The PCSF is a well-known problem in graph theory. Given an undirected graph $G = (V, E)$, where the vertices are labeled with prizes $p_{v}$ and the edges are labeled with costs $c_{e} > 0$, the goal is to identify a subnetwork $G' = (V', E')$ with a forest structure. The target is to minimize the total edge costs in $E'$, the total node prizes left out of $V'$, and the number of trees in $G'$. This is equivalent to minimization of the following objective function:
 
   $$F(G')= \text{Minimize} \sum_{e{\in}E'} c_{e} + \beta*\sum_{v{\not\in}V'} p_{v} + w*k \label{GW}$$
 
 where $k$ is the number of trees in the forest, and it is regulated by parameter $w$. The parameter $\beta$ is used to tune the prizes of nodes relative to edge costs. 
 
 
-Recently, we have applied PCSF to biological networks in the Forest module of the Omics Integrator software [@Tuncbag]. In biological networks such as Protein-Protein Interaction (PPI) networks, every vertex represents a biomolecule, and every edge corresponds to the cellular interaction between two biomolecules. Edges of the network are given costs which correspond to confidence or frequency of that interaction. The vertices of the network are given prizes according to the measurements of differential expression, copy number, or number of mutation for that gene/protein. The set of vertices that are assigned a prize are referred to as `terminal` nodes. Non-terminal nodes, which were not observed in the experimental data, may appear in the solution and are called `Steiner` nodes. After scoring the interactome, the PCSF is used to detect a relevant subnetwork (forest). The PCSF aims to identify  neighborhoods in interaction networks potentially belonging to the key dysregulated pathways of a disease or experiment.
+Recently, we have applied PCSF to biological networks in the Forest module of the Omics Integrator software [@Tuncbag]. In biological networks such as Protein-Protein Interaction (PPI) networks, every vertex represents a biomolecule, and every edge corresponds to the cellular interaction between two biomolecules. Edges of the network are given costs, which correspond to confidence or frequency of that interaction. The vertices of the network are given prizes according to the measurements of differential expression, copy number, or number of mutation for that gene/protein. The set of vertices that are assigned a prize are referred to as `terminal` nodes. Non-terminal nodes, which were not observed in the experimental data, may appear in the solution and are called `Steiner` nodes. After scoring the interactome, the PCSF is used to detect a relevant subnetwork (forest). The PCSF aims to identify neighborhoods in interaction networks potentially belonging to the key dysregulated pathways of a disease or experiment.
 
-In order to avoid a bias for the hub nodes of PPI networks to appear in solution of PCSF, we use the method introduced in Forest [@Tuncbag], which penalizes the prizes of  nodes according to their degree in the PPI. The parameter $\mu$ controls the size of these penalties:
+In order to avoid a bias for the hub nodes of PPI networks to appear in solution of PCSF, we use the method introduced in Forest [@Tuncbag], which penalizes the prizes of nodes according to their degree in the PPI. The parameter $\mu$ controls the size of these penalties:
   $$p'_{v} = p_{v} - \mu*degree(v)$$
 The parameter $\mu$ also affects the total number of `Steiner` nodes in the solution. The higher the value of $\mu$, the smaller the number of `Steiner` nodes in the subnetwork, and vice-versa. The recommended range of $\mu$ for biological networks is between `1e-4` and `5e-2` to fine-tune the `Steiner`/`terminal` node ratio in the subnetwork and average `Steiner`/`terminal` in-degree ratio of the corresponding nodes in the original template network.
 
@@ -67,7 +67,7 @@ devtools::install_github("IOR-Bioinformatics/PCSF")
 
 #### Application
 
-In this simple example application, we demonstrate the functions of the PCSF package and its usage. In this study, we analyze differential phosphoproteomic data derived from H358 cells, a model of non-small cell lung cancer, that were stimulated with TGF-β. These data were previously published [@Thomson], and are the same ones used to demonstrate Omics Integrator [@Tuncbag, Figure 4]. We used the PPI network from the STRING database (version 13) [@Szklarczyk] as a template network, in which the network edges have a confidence score `s(e)` computed from experimental channels. The low confidence edges with `s(e) < 0.5` are removed from the interactome to increase the reliability of computational findings. We convert edge confidence into edge cost: `c(e) = max(0.01, 1-s(e))`. The mutation data and PPI network is available in the package. Let's load the library and data into an R session.
+In this simple example application, we demonstrate the functions of the PCSF package and its usage. In this study, we analyze differential phosphoproteomic data derived from H358 cells, a model of non-small cell lung cancer, which were stimulated with TGF-β. These data were previously published [@Thomson], and are the same ones used to demonstrate Omics Integrator [@Tuncbag, Figure 4]. We used the PPI network from the STRING database (version 13) [@Szklarczyk] as a template network, in which the network edges have a confidence score `s(e)` computed from experimental channels. The low confidence edges with `s(e) < 0.5` are removed from the interactome to increase the reliability of computational findings. We convert edge confidence into edge cost: `c(e) = max(0.01, 1-s(e))`. The mutation data and PPI network is available in the package. Let's load the library and data into an R session.
 
 ```{r, results='hide', message=FALSE, warning=FALSE}
 library(PCSF)
@@ -88,7 +88,7 @@ ppi
 ```
 <br>  
 
-We then generate a vector named `terminals` which is composed of genes with prizes to be analyzed in the PCSF context. Here, our prizes come from the phosphoproteomic data derived from H358 cells. There are 58 proteins which were determined to be significantly modulated in phosphorylation after TGF-β stimulation, and the prize for each protein is the absolute value of the log fold change in phosphotyrosine abundance.
+We then generate a vector named `terminals` that is composed of genes with prizes to be analyzed in the PCSF context. Here, our prizes come from the phosphoproteomic data derived from H358 cells. There are 58 proteins which were determined to be significantly modulated in phosphorylation after TGF-β stimulation, and the prize for each protein is the absolute value of the log fold change in phosphotyrosine abundance.
 
 Users can generate this vector by providing their own data. It must be a named numeric vector, where the genes names are the same as in the interaction network and numeric values correspond to the importance of the gene within the study.
 
@@ -175,7 +175,7 @@ gene_universe <- V(ppi)$name
 res <- enrichment_analysis(subnet, mode=1, gene_universe)
 ```
 
-In contrust, EnrichR API does not require a `gene_universe`, and it gathers and combines the enrichment analyses for `GO_Biological_Process_2015`,`KEGG_2016`, `Reactome_2016`, and `BioCarta_2016` databases.
+In contrast, EnrichR API does not require a `gene_universe`, and it gathers and combines the enrichment analyses for `GO_Biological_Process_2015`,`KEGG_2016`, `Reactome_2016`, and `BioCarta_2016` databases.
 
 ```{r, results='hide', message=FALSE, warning=FALSE}
 res <- enrichment_analysis(subnet)
@@ -206,4 +206,5 @@ In this case, the presence of subnetworks enriched for Gene Ontology terms like 
 
 
 #### REFERENCES
+
 
