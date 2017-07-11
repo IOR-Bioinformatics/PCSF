@@ -19,6 +19,7 @@
 #' A default value is "lightgreen".
 #' @param ... Ignored.
 #' @import igraph visNetwork
+#' @method plot PCSF
 #' @export
 #' 
 #' 

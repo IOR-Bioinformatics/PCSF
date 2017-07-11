@@ -42,8 +42,8 @@
 #' @seealso \code{\link{PCSF}}, \code{\link{plot.PCSFe}}
 #' 
 #' @references 
-#' Akhmedov M., LeNail A., Bertoni F., Kwee I., Fraenkel E., and Montemanni R. (2017).
-#' "A Fast Prize-Collecting Steiner Forest Algorithm for Functional Analyses in Biological Networks."
+#' Akhmedov M., LeNail A., Bertoni F., Kwee I., Fraenkel E., and Montemanni R. (2017)
+#' A Fast Prize-Collecting Steiner Forest Algorithm for Functional Analyses in Biological Networks.
 #' \emph{Lecture Notes in Computer Science}, to appear.
 
 
@@ -105,7 +105,7 @@ function(ppi, terminals, n = 10, r = 0.1, w = 2, b = 1, mu = 0.0005){
   for(i in 1:n){
     
     # Randomize the edge costs
-    cost = c(rep(w, length(terminal_names)), E(ppi)$weight + E(ppi)$weight*runif(length(E(ppi)), 0, r))
+    cost = c(rep(w, length(terminal_names)), E(ppi)$weight + E(ppi)$weight*stats::runif(length(E(ppi)), 0, r))
     
     # Feed in the input files into MSt-PCSF algorithm
     output = call_sr(from,to,cost,node_names,node_prizes)
