@@ -54,7 +54,7 @@ Comments:
 
 #### Test environments
 
-* Mac OS X (10.12.3), R 3.2.5
+* Mac OS X (10.12.4), R 3.4.0
 * Ubuntu (16.04), R 3.2.3
 * Windows 7, R 3.2.5
 
