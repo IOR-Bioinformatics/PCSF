@@ -103,7 +103,7 @@ plot.PCSFe <-function(x, edge_width = 5, node_size = 30, node_label_cex = 1, ...
     visIgraphLayout(layout = "layout_with_fr") %>%
     visOptions(highlightNearest = list(enabled = T), selectedBy = "group")%>%
     visLegend(addNodes = list(
-      list(label = "Terminal", shape = "dot", size = 15),
-      list(label = "Steiner", shape = "triangle",size = 6)), width = 0.1,
+      list(label = "Terminal", shape = "dot", size = 15, label.cex = 0.3),
+      list(label = "Steiner", shape = "triangle",size = 9, label.cex = 0.3)), width = 0.2,
       useGroups = FALSE)
 }
