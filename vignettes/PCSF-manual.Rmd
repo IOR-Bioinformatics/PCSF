@@ -57,8 +57,9 @@ In order to compile the source, Windows users should install the `Rtools` packag
 The PCSF package and its dependencies can be installed on Mac OS, Linux and Windows by running the following commands in the R console.
 
 ```{r, eval=FALSE}
-install.packages("devtools", dep = TRUE)
-devtools::install_github("IOR-Bioinformatics/PCSF")
+install.packages("devtools", dependencies=TRUE)
+install_github("IOR-Bioinformatics/PCSF", repos=BiocInstaller::biocinstallRepos(),
+               dependencies=TRUE, type="source", force=TRUE)
 ```
 
 <br>
@@ -113,7 +114,7 @@ plot(subnet, style = 1, edge_width=5, node_size=40, node_label_cex = 30, Steiner
 ```
 
 <center>
-```{r, echo=FALSE, fig.width=9, fig.height=6}
+```{r, echo=FALSE, fig.width=10, fig.height=6}
 plot(subnet, style = 1, edge_width=5, node_size=40, node_label_cex = 30, Steiner_node_color = "lightblue", 
             Terminal_node_color = "lightgreen")
 ```
@@ -127,7 +128,7 @@ subnet <- PCSF(ppi, terminals, w = 2, b = 100, mu = 0.05)
 plot(subnet, style = 1)
 ```
 <center>
-```{r, echo=FALSE, fig.width=9, fig.height=6}
+```{r, echo=FALSE, fig.width=10, fig.height=6}
 plot(subnet, style = 1)
 ```
 </center>
@@ -140,7 +141,7 @@ subnet <- PCSF(ppi, terminals, w = 2, b = 100, mu = 0)
 plot(subnet, style = 1)
 ```
 <center>
-```{r, echo=FALSE, fig.width=9, fig.height=6}
+```{r, echo=FALSE, fig.width=10, fig.height=6}
 plot(subnet, style = 1)
 ```
 </center>
