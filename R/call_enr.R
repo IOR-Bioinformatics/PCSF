@@ -90,7 +90,7 @@ call_enr <- function(clusters, mode=0, gene_universe){
   } else{
     
     # Enrichment analysis is performed by topGO
-    
+
     # Enrichment results
     enrichment_result = as.list(1:length(clusters))
     enrichment_result_complete = as.list(1:length(clusters))

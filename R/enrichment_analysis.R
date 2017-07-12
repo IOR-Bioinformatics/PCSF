@@ -49,6 +49,7 @@
 #' res <- enrichment_analysis(subnet)
 #' res <- enrichment_analysis(subnet, mode=0)}
 #' \dontrun{
+#' library(topGO)
 #' gene_universe <- V(ppi)$name
 #' res <- enrichment_analysis(subnet, mode=1, gene_universe)}
 #' \dontrun{
@@ -89,10 +90,21 @@ enrichment_analysis <-function(subnet, mode=NULL, gene_universe){
   clusters = cluster_edge_betweenness(subnet)
   
   # Perform ebrichment analysis for each cluster using EnrichR through its API or topGO.
+  
+  havingInternet <- function() {
+    if (.Platform$OS.type == "windows") {
+      ipmessage <- system("ipconfig", intern = TRUE)
+    } else {
+      ipmessage <- system("ifconfig", intern = TRUE)
+    }
+    validIP <- "((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)[.]){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)"
+    any(grep(validIP, ipmessage))
+  }
 
+  internet_connection <- havingInternet()
+  
   if(!is.null(mode)){
     if(mode==0){
-      internet_connection <- !as.logical(system("ping -c 1 www.google.com",ignore.stdout = T, ignore.stderr = T))
       if(internet_connection){
         cat("  Enrichment is being performed by EnrichR (http://amp.pharm.mssm.edu/Enrichr) API ...\n")
         enrich = call_enr(clusters, mode = 0, gene_universe)
@@ -108,7 +120,6 @@ enrichment_analysis <-function(subnet, mode=NULL, gene_universe){
   } 
   else
     {
-    internet_connection <- !as.logical(system("ping -c 1 www.google.com",ignore.stdout = T, ignore.stderr = T))
     if(internet_connection){
       cat("  Enrichment is being performed by EnrichR (http://amp.pharm.mssm.edu/Enrichr) API ...\n")
       enrich = call_enr(clusters, mode = 0, gene_universe)
