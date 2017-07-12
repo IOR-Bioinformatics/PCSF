@@ -58,10 +58,10 @@ The PCSF package and its dependencies can be installed on Mac OS, Linux and Wind
 
 ```{r, eval=FALSE}
 source("http://bioconductor.org/biocLite.R")
-biocLite("GO.db")
+biocLite("topGO")
 install.packages("devtools", dependencies=TRUE)
-install_github("IOR-Bioinformatics/PCSF", repos=BiocInstaller::biocinstallRepos(),
-               dependencies=TRUE, type="source", force=TRUE)
+devtools::install_github("IOR-Bioinformatics/PCSF", repos=BiocInstaller::biocinstallRepos(),
+                         dependencies=TRUE, type="source", force=TRUE)
 ```
 
 <br>
