@@ -16,7 +16,6 @@ Depends:
         visNetwork,
 Imports:
         BH,
-        BiocGenerics,
         httr,
         methods,
         org.Hs.eg.db,
