@@ -57,6 +57,7 @@ subnet <- PCSF_rand(ppi, terminals, n = 10, r = 0.1, w = 2, b = 1, mu = 0.0005)
 res <- enrichment_analysis(subnet)
 res <- enrichment_analysis(subnet, mode=0)}
 \dontrun{
+library(topGO)
 gene_universe <- V(ppi)$name
 res <- enrichment_analysis(subnet, mode=1, gene_universe)}
 \dontrun{
