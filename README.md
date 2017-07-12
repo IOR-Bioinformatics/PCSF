@@ -32,7 +32,7 @@ Installation:
 1. The PCSF package depends on the following R-packages: 
 
  - `BH` and `igraph` - for efficient graph handling and calculations,
- - `BiocGenerics`, `httr`, `methods`, `org.Hs.eg.db`, and `topGO` - to perform enrichment analysis,
+ - `httr`, `methods`, `org.Hs.eg.db`, and `topGO` - to perform enrichment analysis,
  - `Rcpp`  - to employ C++ source code within R,
  - `visNetwork` - for visualization.
 
@@ -43,6 +43,8 @@ Installation:
 3. The PCSF package and its dependencies can be installed on Mac OS, Linux and Windows by running the following commands in the R console.
 
 ```
+source("http://bioconductor.org/biocLite.R")
+biocLite("BiocInstaller")
 install.packages("devtools", dependencies=TRUE)
 install_github("IOR-Bioinformatics/PCSF", repos=BiocInstaller::biocinstallRepos(),
                dependencies=TRUE, type="source", force=TRUE)
