@@ -46,8 +46,8 @@ Installation:
 source("http://bioconductor.org/biocLite.R")
 biocLite("GO.db")
 install.packages("devtools", dependencies=TRUE)
-install_github("IOR-Bioinformatics/PCSF", repos=BiocInstaller::biocinstallRepos(),
-               dependencies=TRUE, type="source", force=TRUE)
+devtools::install_github("IOR-Bioinformatics/PCSF", repos=BiocInstaller::biocinstallRepos(),
+                         dependencies=TRUE, type="source", force=TRUE)
 ```
 
 
