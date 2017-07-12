@@ -58,8 +58,7 @@ res <- enrichment_analysis(subnet)
 res <- enrichment_analysis(subnet, mode=0)}
 \dontrun{
 gene_universe <- V(ppi)$name
-res <- enrichment_analysis(subnet, mode=1, gene_universe)
- }
+res <- enrichment_analysis(subnet, mode=1, gene_universe)}
 \dontrun{
 plot(res$subnet)
 write.table(res$enrichment[[1]],file="cluster1_complete_enrichment.txt", 
