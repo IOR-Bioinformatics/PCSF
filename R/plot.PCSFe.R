@@ -7,12 +7,16 @@
 #' @param x An output subnetwork provided by the \code{enrichment_analysis}. 
 #' It is "PCSFe" object derived from an \pkg{igraph} class, and it has the edge 
 #' cost and vertex prize attributes.
-#' @param edge_width A \code{numeric} value to emphasize the maximum edge width. 
+#' @param edge_width A \code{numeric} value to emphasize a maximum edge width. 
 #' A default value is 5. This value must be greater than 1.
-#' @param node_size A \code{numeric} value to emphasize the maximum node size. 
+#' @param node_size A \code{numeric} value to emphasize a maximum node size. 
 #' A default value is 30. This value must be greater than 10.
-#' @param node_label_cex A \code{numeric} value to set the node label size. 
+#' @param node_label_cex A \code{numeric} value to set a node label size. 
 #' A default value is 1.
+#' @param Steiner_node_legend A \code{string} to set a legend for \code{Steiner} nodes. 
+#' A default legend is "Steiner".
+#' @param Terminal_node_legend A \code{string} to set a legend for \code{terminal} nodes. 
+#' A default legend is "Terminal".
 #' @param ... Ignored.
 #' @import igraph visNetwork
 #' @method plot PCSFe
@@ -54,7 +58,9 @@
 
 
 
-plot.PCSFe <-function(x, edge_width = 5, node_size = 30, node_label_cex = 1, ...){
+plot.PCSFe <-function(x, edge_width = 5, node_size = 30, node_label_cex = 1, 
+                      Terminal_node_legend = "Terminal",
+                      Steiner_node_legend = "Steiner",...){
   
   
   subnet = x
@@ -103,7 +109,7 @@ plot.PCSFe <-function(x, edge_width = 5, node_size = 30, node_label_cex = 1, ...
     visIgraphLayout(layout = "layout_with_fr") %>%
     visOptions(highlightNearest = list(enabled = T), selectedBy = "group")%>%
     visLegend(addNodes = list(
-      list(label = "Terminal", shape = "dot", size = 15, label.cex = 0.3),
-      list(label = "Steiner", shape = "triangle",size = 9, label.cex = 0.3)), width = 0.2,
+      list(label = Terminal_node_legend, shape = "dot", size = 15, label.cex = 0.3),
+      list(label = Steiner_node_legend, shape = "triangle",size = 9, label.cex = 0.3)), width = 0.2,
       useGroups = FALSE)
 }

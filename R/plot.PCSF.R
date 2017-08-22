@@ -8,15 +8,18 @@
 #' @param style A \code{boolean} value to determine the visualization style of the network, 
 #' where \code{0} plots the \code{static} network and \code{1} plots the \code{dynamic} 
 #' network. The default valu is 0.
-#' @param edge_width A \code{numeric} value to emphasize the maximum edge width. A default value is 5. 
+#' @param edge_width A \code{numeric} value to emphasize a maximum edge width. A default value is 5. 
 #' This value must be greater than 1.
-#' @param node_size A \code{numeric} value to emphasize the maximum node size. A default value is 40. 
+#' @param node_size A \code{numeric} value to emphasize a maximum node size. A default value is 40. 
 #' This value must be greater than 10.
-#' @param node_label_cex A \code{numeric} value to set the node label size. A default value is 30.
-#' @param Steiner_node_color A \code{string} to set the color of \code{Steiner} nodes. 
+#' @param node_label_cex A \code{numeric} value to set a node label size. A default value is 30.
+#' @param Steiner_node_color A \code{string} to set a color for \code{Steiner} nodes. 
 #' A default value is "lightblue".
-#' @param Terminal_node_color A \code{string} to set the color of \code{terminal} nodes. 
-#' A default value is "lightgreen".
+#' @param Terminal_node_color A \code{string} to set a color for \code{terminal} nodes. 
+#' @param Steiner_node_legend A \code{string} to set a legend for \code{Steiner} nodes. 
+#' A default legend is "Steiner".
+#' @param Terminal_node_legend A \code{string} to set a legend for \code{terminal} nodes. 
+#' A default legend is "Terminal".
 #' @param ... Ignored.
 #' @import igraph visNetwork
 #' @method plot PCSF
@@ -46,7 +49,8 @@
 
 plot.PCSF <-
 function(x, style = 0, edge_width=5, node_size=40, node_label_cex = 30, Steiner_node_color = "lightblue", 
-         Terminal_node_color = "lightgreen", ...){
+         Terminal_node_color = "lightgreen", Terminal_node_legend = "Terminal",
+         Steiner_node_legend = "Steiner",...){
   
   subnet = x
   # Checking function arguments
@@ -109,8 +113,8 @@ function(x, style = 0, edge_width=5, node_size=40, node_label_cex = 30, Steiner_
       visGroups(groupname = "Terminal", color = list(background = Terminal_node_color, border = "green"), shape = "dot") %>%
       visOptions(highlightNearest = list(enabled = T)) %>%
       visLegend(addNodes = list(
-        list(label = "Terminal", shape = "dot", size = 15, color = list(background = Terminal_node_color, border = "green"), label.cex = 0.8),
-        list(label = "Steiner", shape = "triangle",size = 10, color = list(background = Steiner_node_color, border = "blue"), label.cex = 0.8 )), width = 0.15,
+        list(label = Terminal_node_legend, shape = "dot", size = 15, color = list(background = Terminal_node_color, border = "green"), label.cex = 0.8),
+        list(label = Steiner_node_legend, shape = "triangle",size = 10, color = list(background = Steiner_node_color, border = "blue"), label.cex = 0.8 )), width = 0.15,
         useGroups = FALSE)
     
     
@@ -138,8 +142,8 @@ function(x, style = 0, edge_width=5, node_size=40, node_label_cex = 30, Steiner_
       visGroups(groupname = "Terminal", color = list(background = Terminal_node_color, border = "green"), shape = "dot") %>%
       visOptions(highlightNearest = list(enabled = T)) %>%
       visLegend(addNodes = list(
-        list(label = "Terminal", shape = "dot", size = 14, color = list(background = Terminal_node_color, border = "green"), label.cex = 0.5),
-        list(label = "Steiner", shape = "triangle",size = 8, color = list(background = Steiner_node_color, border = "blue"), label.cex = 0.5)), width = 0.2,
+        list(label = Terminal_node_legend, shape = "dot", size = 14, color = list(background = Terminal_node_color, border = "green"), label.cex = 0.5),
+        list(label = Steiner_node_legend, shape = "triangle",size = 8, color = list(background = Steiner_node_color, border = "blue"), label.cex = 0.5)), width = 0.2,
         useGroups = FALSE)
 
   }
