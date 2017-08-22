@@ -1,7 +1,7 @@
 Package: PCSF
 Type: Package
 Title: Network-based interpretation of highthroughput data
-Version: 0.99.0
+Version: 0.99.1
 Date: 2017-02-01
 Author: Murodzhon Akhmedov, Amanda Kedaigle, Renan Escalante, Roberto Montemanni, Francesco Bertoni, Ernest Fraenkel, Ivo Kwee
 Maintainer: Murodzhon Akhmedov <murodzhon@idsia.ch>
