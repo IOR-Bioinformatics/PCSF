@@ -5,21 +5,28 @@
 \title{Plot an interactive subnetwork with functional enrichment analysis}
 \usage{
 \method{plot}{PCSFe}(x, edge_width = 5, node_size = 30,
-  node_label_cex = 1, ...)
+  node_label_cex = 1, Terminal_node_legend = "Terminal",
+  Steiner_node_legend = "Steiner", ...)
 }
 \arguments{
 \item{x}{An output subnetwork provided by the \code{enrichment_analysis}. 
 It is "PCSFe" object derived from an \pkg{igraph} class, and it has the edge 
 cost and vertex prize attributes.}
 
-\item{edge_width}{A \code{numeric} value to emphasize the maximum edge width. 
+\item{edge_width}{A \code{numeric} value to emphasize a maximum edge width. 
 A default value is 5. This value must be greater than 1.}
 
-\item{node_size}{A \code{numeric} value to emphasize the maximum node size. 
+\item{node_size}{A \code{numeric} value to emphasize a maximum node size. 
 A default value is 30. This value must be greater than 10.}
 
-\item{node_label_cex}{A \code{numeric} value to set the node label size. 
+\item{node_label_cex}{A \code{numeric} value to set a node label size. 
 A default value is 1.}
+
+\item{Terminal_node_legend}{A \code{string} to set a legend for \code{terminal} nodes. 
+A default legend is "Terminal".}
+
+\item{Steiner_node_legend}{A \code{string} to set a legend for \code{Steiner} nodes. 
+A default legend is "Steiner".}
 
 \item{...}{Ignored.}
 }
