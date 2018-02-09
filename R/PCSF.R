@@ -78,7 +78,7 @@
     
 
 PCSF <-
-function(ppi, terminals, w = 2, b = 1, mu = 0.0005){
+function(ppi, terminals, w = 2, b = 1, mu = 0.0005, dummies){
   
   # Checking function arguments
   if (missing(ppi))
@@ -91,6 +91,8 @@ function(ppi, terminals, w = 2, b = 1, mu = 0.0005){
   if(is.null(names(terminals)))
     stop("  The terminal nodes must be provided as a named numeric vector, 
     where node names must be same as in the interaction network.")
+  
+
   
   
   # Gather the terminal genes to be analyzed, and their scores
@@ -110,7 +112,8 @@ function(ppi, terminals, w = 2, b = 1, mu = 0.0005){
   index = index[!is.na(index)]
   node_prz[index] =  terminal_values
 
-
+  if(missing(dummies)||is.null(dummies)||is.na(dummies))
+    dummies = terminal_names #re-assign this to allow for input
 
   ## Prepare input file for MST-PCSF implementation in C++
   
@@ -128,9 +131,9 @@ function(ppi, terminals, w = 2, b = 1, mu = 0.0005){
 
   # Construct the list of edges 
   edges = ends(ppi,es = E(ppi))
-  from = c(rep("DUMMY", length(terminal_names)), edges[,1])
-  to = c(terminal_names, edges[,2])
-  cost = c(rep(w, length(terminal_names)), E(ppi)$weight)
+  from = c(rep("DUMMY", length(dummies)), edges[,1])
+  to = c(dummies, edges[,2])
+  cost = c(rep(w, length(dummies)), E(ppi)$weight)
 
   
   ## Feed the input into the PCSF algorithm
