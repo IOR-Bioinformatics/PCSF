@@ -15,6 +15,6 @@
 #' @author Murodzhon Akhmedov
 #'
 call_sr <- function(from, to, cost, node_names, node_prizes) {
-    .Call('PCSF_call_sr', PACKAGE = 'PCSF', from, to, cost, node_names, node_prizes)
+    .Call('_PCSF_call_sr', PACKAGE = 'PCSF', from, to, cost, node_names, node_prizes)
 }
 
