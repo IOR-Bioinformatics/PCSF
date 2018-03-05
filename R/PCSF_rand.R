@@ -108,7 +108,7 @@ function(ppi, terminals, n = 10, r = 0.1, w = 2, b = 1, mu = 0.0005,dummies){
   for(i in 1:n){
     
     # Randomize the edge costs
-    cost = c(rep(w, length(terminal_names)), E(ppi)$weight + E(ppi)$weight*stats::runif(length(E(ppi)), 0, r))
+    cost = c(rep(w, length(dummies)), E(ppi)$weight + E(ppi)$weight*stats::runif(length(E(ppi)), 0, r))
     
     # Feed in the input files into MSt-PCSF algorithm
     output = call_sr(from,to,cost,node_names,node_prizes)
