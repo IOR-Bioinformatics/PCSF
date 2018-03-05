@@ -9,6 +9,7 @@
 #' @param w A \code{numeric} value for tuning the number of trees in the output. A default value is 2.
 #' @param b A \code{numeric} value for tuning the node prizes. A default value is 1.
 #' @param mu A \code{numeric} value for a hub penalization. A default value is 0.0005.
+#' @param dummies A list of nodes that are to connected to the root of the tree. If missing the root will be connected to all terminals.
 #' @return The final subnetwork obtained by the PCSF.
 #' It return an \pkg{igraph} object with the node prize and edge cost attributes.
 #' @import igraph
