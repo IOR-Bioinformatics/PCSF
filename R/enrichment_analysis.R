@@ -129,8 +129,22 @@ enrichment_analysis <-function(subnet, mode=NULL, gene_universe){
     }
   }
 
+    if('Compound'%in% V(subnet)$type){##then we have drugs!
+        require(dplyr)
+        comps=data.frame(Drug=V(mpnst.net)$name[which(V(mpnst.net)$type=='Compound')],
+                         Cluster=clusters$membership[which(V(mpnst.net)$type=='Compound')])%>%
+            dplyr::group_by(Cluster)%>%
+            dplyr::summarise(DrugsByBetweenness=paste(Drug,collapse=';'))
+
+    }
+    else{
+        comps <-NULL
+        }
   enrichment = enrich[[1]]
   enrichment_complete = enrich[[2]]
+  enrichment_tab = do.call(rbind,lapply(c(1:length(enrichment_complete)),function(x) data.frame(Cluster=x,enrichment_complete[[x]])))
+    if(!is.null(comps))
+        enrichment_tab = enrichment_tab%>%dplyr::left_join(comps,by='Cluster')
 
   # Add 'group" and 'title' attributes to subnet
   V(subnet)$group = clusters$membership
@@ -142,7 +156,7 @@ enrichment_analysis <-function(subnet, mode=NULL, gene_universe){
   # Derive a "PCSFe" object from an "igraph" class.
   class(subnet) <- c("PCSFe", "igraph")
   # Combine the subnetwork and colplete enrichment analysis tables.
-  output = list(subnet, enrichment_complete)
+  output = list(subnet, enrichment_tab)
   names(output) = c("subnet", "enrichment")
 
   return (output)
