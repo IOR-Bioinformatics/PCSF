@@ -16,6 +16,7 @@
 #' @param Steiner_node_legend A \code{string} to set a legend for \code{Steiner} nodes. 
 #' A default legend is "Steiner".
 #' @param Terminal_node_legend A \code{string} to set a legend for \code{terminal} nodes. 
+#' @param extra_node_colors A \code{list} with colors of extra types of nodes added to the PCSF result, with the names of the list being the node type
 #' A default legend is "Terminal".
 #' @param ... Ignored.
 #' @import igraph visNetwork
@@ -60,7 +61,9 @@
 
 plot.PCSFe <-function(x, edge_width = 5, node_size = 30, node_label_cex = 1, 
                       Terminal_node_legend = "Terminal",
-                      Steiner_node_legend = "Steiner",...){
+                      Steiner_node_legend = "Steiner",
+                       extra_node_colors = list(),
+                      ...){
   
   
   subnet = x
