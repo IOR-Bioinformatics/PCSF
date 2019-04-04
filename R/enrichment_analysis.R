@@ -142,7 +142,8 @@ enrichment_analysis <-function(subnet, mode=NULL, gene_universe){
         }
   enrichment = enrich[[1]]
   enrichment_complete = enrich[[2]]
-  enrichment_tab = do.call(rbind,lapply(c(1:length(enrichment_complete)),function(x) data.frame(Cluster=x,enrichment_complete[[x]])))
+    enrichment_tab = do.call(rbind,lapply(c(1:length(enrichment_complete)),function(x) data.frame(Cluster=x,enrichment_complete[[x]])))
+
     if(!is.null(comps))
         enrichment_tab = enrichment_tab%>%dplyr::left_join(comps,by='Cluster')
 
