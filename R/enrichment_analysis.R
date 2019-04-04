@@ -131,8 +131,8 @@ enrichment_analysis <-function(subnet, mode=NULL, gene_universe){
 
     if('Compound'%in% V(subnet)$type){##then we have drugs!
         require(dplyr)
-        comps=data.frame(Drug=V(mpnst.net)$name[which(V(mpnst.net)$type=='Compound')],
-                         Cluster=clusters$membership[which(V(mpnst.net)$type=='Compound')])%>%
+        comps=data.frame(Drug=V(subnet)$name[which(V(subnet)$type=='Compound')],
+                         Cluster=clusters$membership[which(V(subnet)$type=='Compound')])%>%
             dplyr::group_by(Cluster)%>%
             dplyr::summarise(DrugsByBetweenness=paste(Drug,collapse=';'))
 
