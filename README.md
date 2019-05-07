@@ -5,7 +5,7 @@ PCSF: an R-Package for Network-Based Interpretation of High-throughput Data
 
 The PCSF package performs fast and user-friendly network analysis of high-throughput data. Using interaction networks as a template, it determines high-confidence subnetworks relevant to the data, which potentially leads to predictions of functional units. It also interactively visualizes the resulting subnetwork with functional enrichment analysis.
 
-Contact: Murodzhon Akhmedov [murodzhon@idsia.ch]
+Contact: Murodzhon Akhmedov [murodzhon.akhmedov@irb.usi.ch]
 
 
 
