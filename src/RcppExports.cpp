@@ -7,7 +7,7 @@ using namespace Rcpp;
 
 // call_sr
 List call_sr(CharacterVector from, CharacterVector to, NumericVector cost, CharacterVector node_names, NumericVector node_prizes);
-RcppExport SEXP PCSF_call_sr(SEXP fromSEXP, SEXP toSEXP, SEXP costSEXP, SEXP node_namesSEXP, SEXP node_prizesSEXP) {
+RcppExport SEXP _PCSF_call_sr(SEXP fromSEXP, SEXP toSEXP, SEXP costSEXP, SEXP node_namesSEXP, SEXP node_prizesSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -19,4 +19,14 @@ BEGIN_RCPP
     rcpp_result_gen = Rcpp::wrap(call_sr(from, to, cost, node_names, node_prizes));
     return rcpp_result_gen;
 END_RCPP
+}
+
+static const R_CallMethodDef CallEntries[] = {
+    {"_PCSF_call_sr", (DL_FUNC) &_PCSF_call_sr, 5},
+    {NULL, NULL, 0}
+};
+
+RcppExport void R_init_PCSF(DllInfo *dll) {
+    R_registerRoutines(dll, NULL, CallEntries, NULL, NULL);
+    R_useDynamicSymbols(dll, FALSE);
 }
